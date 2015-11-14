@@ -8,6 +8,8 @@ int main() {
         return (x * x + 2) / 3;
     };
 
+    // will result in NaNs because the value under the square root
+    // will become negative at some point.
     auto g2 = [](double x) -> double {
         return std::sqrt(3 * x - 2);
     };
