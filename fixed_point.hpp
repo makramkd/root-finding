@@ -93,5 +93,20 @@ namespace fp {
         }
 
         file << "END" << std::endl;
-    };
+    }
+
+    template<typename Func, typename Float>
+    std::tuple<std::vector<Float>, int, std::vector<Float>> newton_method(const Func& f, Float x0, Float abstol)
+    {
+
+    }
+
+    template<typename Func, typename Float>
+    std::tuple<std::vector<Float>,
+            int,
+            std::vector<Float>>
+    secant_method(const Func& f, Float x0, Float x1, Float abstol)
+    {
+
+    }
 }
