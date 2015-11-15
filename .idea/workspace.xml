@@ -11,7 +11,9 @@
     </ADDITIONAL_GENERATION_ENVIRONMENT>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9cb2af99-dfac-497b-a7a7-c501917294c2" name="Default" comment="" />
+    <list default="true" id="9cb2af99-dfac-497b-a7a7-c501917294c2" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="fixed_point.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,21 +33,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="31" column="1" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
+              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -56,13 +48,40 @@
       <file leaf-file-name="fixed_point.hpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fixed_point.hpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.9047619">
-              <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.8214286">
+              <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
               <folding>
                 <element signature="e#14#32#0" expanded="true" />
                 <element signature="e#135#166#0" expanded="true" />
+                <element signature="e#127#1452#0" expanded="false" />
                 <element signature="e#1466#1478#0" expanded="true" />
+                <element signature="e#1458#1677#0" expanded="false" />
                 <element signature="e#1691#1722#0" expanded="true" />
+                <element signature="e#1683#3072#0" expanded="false" />
+                <element signature="e#4066#4097#0" expanded="true" />
+                <element signature="e#4237#4268#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="derivative.hpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/derivative.hpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="71" column="96" selection-start-line="71" selection-start-column="96" selection-end-line="71" selection-end-column="96" />
+              <folding>
+                <element signature="e#53#75#0" expanded="true" />
+                <element signature="e#266#281#0" expanded="true" />
+                <element signature="e#313#345#0" expanded="true" />
+                <element signature="e#609#624#0" expanded="true" />
+                <element signature="e#763#795#0" expanded="true" />
+                <element signature="e#962#994#0" expanded="true" />
+                <element signature="e#1135#1182#0" expanded="true" />
+                <element signature="e#1367#1395#0" expanded="true" />
+                <element signature="e#1570#1585#0" expanded="true" />
+                <element signature="e#1623#1655#0" expanded="true" />
+                <element signature="e#1895#1907#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -83,8 +102,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/main.cpp" />
+        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/fixed_point.hpp" />
+        <option value="$PROJECT_DIR$/derivative.hpp" />
+        <option value="$PROJECT_DIR$/main.cpp" />
       </list>
     </option>
   </component>
@@ -94,8 +115,8 @@
     <detection-done>true</detection-done>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="13" />
-    <option name="y" value="30" />
+    <option name="x" value="29" />
+    <option name="y" value="25" />
     <option name="width" value="1400" />
     <option name="height" value="861" />
   </component>
@@ -150,6 +171,8 @@
     <property name="settings.editor.selected.configurable" value="fileTemplates" />
     <property name="js-jscs-nodeInterpreter" value="$USER_HOME$/.nvm/versions/node/v4.2.0/bin/node" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="ignore_missing_gitignore" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../my-mpl" />
   </component>
   <component name="RunManager" selected="Application.fixed_point">
     <configuration default="true" type="CMakeGoogleTestRunConfigurationType" factoryName="Google Test" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="fixed_point" TARGET_NAME="fixed_point" CONFIG_NAME="Debug" TEST_MODE="SUITE_TEST">
@@ -199,7 +222,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="13" y="30" width="1400" height="861" extended-state="0" />
+    <frame x="29" y="25" width="1400" height="861" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -255,10 +278,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/derivative.hpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="71" column="96" selection-start-line="71" selection-start-column="96" selection-end-line="71" selection-end-column="96" />
+          <folding>
+            <element signature="e#53#75#0" expanded="true" />
+            <element signature="e#266#281#0" expanded="true" />
+            <element signature="e#313#345#0" expanded="true" />
+            <element signature="e#609#624#0" expanded="true" />
+            <element signature="e#763#795#0" expanded="true" />
+            <element signature="e#962#994#0" expanded="true" />
+            <element signature="e#1135#1182#0" expanded="true" />
+            <element signature="e#1367#1395#0" expanded="true" />
+            <element signature="e#1570#1585#0" expanded="true" />
+            <element signature="e#1623#1655#0" expanded="true" />
+            <element signature="e#1895#1907#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="31" column="1" selection-start-line="31" selection-start-column="1" selection-end-line="31" selection-end-column="1" />
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
@@ -267,13 +318,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fixed_point.hpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.9047619">
-          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.8214286">
+          <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
           <folding>
             <element signature="e#14#32#0" expanded="true" />
             <element signature="e#135#166#0" expanded="true" />
+            <element signature="e#127#1452#0" expanded="false" />
             <element signature="e#1466#1478#0" expanded="true" />
+            <element signature="e#1458#1677#0" expanded="false" />
             <element signature="e#1691#1722#0" expanded="true" />
+            <element signature="e#1683#3072#0" expanded="false" />
+            <element signature="e#4066#4097#0" expanded="true" />
+            <element signature="e#4237#4268#0" expanded="true" />
           </folding>
         </state>
       </provider>
