@@ -370,17 +370,29 @@ namespace fp {
     }
 
     template<typename Func, typename Float>
-    Float
+    std::tuple<std::vector<Float>,
+            int,
+            std::vector<Float>>
     bisection_method(const Func& f, Float a, Float b, Float abstol, int numiters)
     {
+        std::vector<Float> xvec; // to store intermediate root approximations
+        std::vector<Float> rvec; // to store rate approximations
         auto n = 1;
+
+        Float prevc;
         Float c;
+        Float nextc;
         Float l = a;
         Float u = b;
+        Float rate;
+        Float currtol;
         while (n <= numiters)
         {
+            prevc = c; // will be garbage in first iteration
             c = midpoint(l, u);
-            if ((u - l) < abstol) {
+            xvec.push_back(u);
+            currtol = std::abs(c - prevc);
+            if (currtol < abstol) {
                 break;
             }
             if (sign(f(c)) == sign(f(l))) {
@@ -388,9 +400,73 @@ namespace fp {
             } else {
                 u = c;
             }
+            // get nextc to calculate rate
+            nextc = midpoint(l, u);
+            // will probably be garbage in the first iteration
+            if (n >= 2) {
+                rate = std::log(std::abs(nextc - c) / currtol) / std::log(currtol / std::abs(prevc - xvec[n - 2]));
+                rvec.push_back(rate);
+            }
             n++;
         }
 
-        return c;
+        return std::make_tuple(xvec, n, rvec);
+    }
+
+    template<typename Func, typename Float>
+    void test_bisection_method(const Func& f, Float a, Float b, Float abstol, int numiters,
+                               const std::string& funcname = "f", const std::string& filename = "test_f.txt")
+    {
+        const int nameWidth     = 24;
+        const int numWidth      = 25;
+
+        std::ofstream file;
+        file.open(filename.c_str(), std::ios::out | std::ios::app);
+        file << std::scientific << std::setprecision(15);
+        file << "Getting the roots of '" << funcname
+        << "' given a = " << a << ", b = " << b << ", numiters = " << numiters
+            << " and abstol = " << abstol << std::endl;
+
+        auto tuple = bisection_method(f, a, b, abstol, numiters);
+
+        auto xvec = std::get<0>(tuple);
+        auto iters = std::get<1>(tuple);
+        auto rvec = std::get<2>(tuple);
+
+        printElement("i", nameWidth, file);
+        printElement("x_i", nameWidth, file);
+        printElement("|x_i - x_{i - 1}|", nameWidth, file);
+        printElement("rate", nameWidth, file);
+        file << '\n';
+
+        for (auto i = 0; i < xvec.size(); ++i)
+        {
+            printElement(i, numWidth, file);
+            printElement(xvec[i], numWidth, file);
+            if ((i - 1) >= 0) {
+                printElement(std::abs(xvec[i] - xvec[i - 1]), numWidth, file);
+            }
+            printElement(rvec[i], numWidth, file);
+            file << '\n';
+        }
+
+        file << "END" << std::endl;
+    }
+
+    void test_bisection(double abstol, int numiters)
+    {
+        using namespace newton; // using the newton functions
+
+        std::vector<double (*)(double)> vec {f1, f2, f3, f4, f5};
+        std::vector<std::string> filenames {"bisectionf1.txt", "bisectionf2.txt",
+                                            "bisectionf3.txt", "bisectionf4.txt", "bisectionf5.txt"};
+        std::vector<std::string> funcnames {"f1", "f2", "f3", "f4", "f5"};
+        // interval data
+        std::vector<double> as {1.5, 1, -1, 0, 0.5}; // lower bound limit for bisection
+        std::vector<double> bs {2.5, 3, 2, 2, 1.5}; // upper bound limit for bisection
+
+        for (auto i = 0; i < vec.size(); ++i) {
+            test_bisection_method(*vec[i], as[i], bs[i], abstol, numiters, funcnames[i], filenames[i]);
+        }
     }
 }
