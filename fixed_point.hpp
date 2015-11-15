@@ -179,7 +179,7 @@ namespace fp {
         std::ofstream file;
         file.open(filename.c_str(), std::ios::out | std::ios::app);
         file << std::scientific << std::setprecision(15);
-        file << "Getting the fixed points of '" << funcname
+        file << "Getting the roots of '" << funcname
         << "' given x_0 = " << x0 << " and abstol = " << abstol << std::endl;
 
         auto tuple = newton_method(f, x0, abstol);
@@ -300,6 +300,45 @@ namespace fp {
         return std::make_tuple(xvec, i, rvec);
     }
 
+    template<typename Func, typename Float>
+    void test_secant_method(const Func& f, Float x0, Float x1, Float abstol,
+                            const std::string& funcname = "f", const std::string& filename = "test_f.txt")
+    {
+        const int nameWidth     = 24;
+        const int numWidth      = 25;
+
+        std::ofstream file;
+        file.open(filename.c_str(), std::ios::out | std::ios::app);
+        file << std::scientific << std::setprecision(15);
+        file << "Getting the roots of '" << funcname
+        << "' given x_0 = " << x0 << ", x_1 = " << x1 << " and abstol = " << abstol << std::endl;
+
+        auto tuple = secant_method(f, x0, x1, abstol);
+
+        auto xvec = std::get<0>(tuple);
+        auto iters = std::get<1>(tuple);
+        auto rvec = std::get<2>(tuple);
+
+        printElement("i", nameWidth, file);
+        printElement("x_i", nameWidth, file);
+        printElement("|x_i - x_{i - 1}|", nameWidth, file);
+        printElement("rate", nameWidth, file);
+        file << '\n';
+
+        for (auto i = 0; i < xvec.size(); ++i)
+        {
+            printElement(i, numWidth, file);
+            printElement(xvec[i], numWidth, file);
+            if ((i - 1) >= 0) {
+                printElement(std::abs(xvec[i] - xvec[i - 1]), numWidth, file);
+            }
+            printElement(rvec[i], numWidth, file);
+            file << '\n';
+        }
+
+        file << "END" << std::endl;
+    }
+
     template<typename Float, typename = std::enable_if<std::is_arithmetic<Float>::value>::type>
     Float midpoint(Float a, Float b)
     {
@@ -326,7 +365,7 @@ namespace fp {
             if ((u - l) < abstol) {
                 break;
             }
-            if (sign(f(c)) = sign(f(l))) {
+            if (sign(f(c)) == sign(f(l))) {
                 l = c;
             } else {
                 b = c;
