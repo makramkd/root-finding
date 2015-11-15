@@ -1,34 +1,32 @@
 #include <iostream>
 
-#include "fixed_point.hpp"
+#include "derivative.hpp"
 
+int f(int, int, int)
+{
+    return 0;
+}
+
+double g(double*, char*, std::ostream&)
+{
+    return 0.0;
+}
+
+double f1(double x)
+{
+    return x * x;
+}
+
+double f2(double x)
+{
+    return 2 * x * x + 3 * x;
+}
 
 int main() {
-    auto g1 = [](double x) -> double {
-        return (x * x + 2) / 3;
-    };
 
-    // will result in NaNs because the value under the square root
-    // will become negative at some point.
-    auto g2 = [](double x) -> double {
-        return std::sqrt(3 * x - 2);
-    };
+    auto df1 = fp::derivative(f1, 1.);
+    auto df2 = fp::derivative(f2, 1.0 / 2.0);
 
-    auto g3 = [](double x) -> double {
-        return 3 - (2 / x);
-    };
-
-    auto g4 = [](double x) -> double {
-        return (x * x  - 2) / (2 * x - 3);
-    };
-
-    std::vector<std::function<double(double)>> vec {g1, g2, g3, g4};
-    std::vector<std::string> filenames {"g1.txt", "g2.txt", "g3.txt", "g4.txt"};
-    std::vector<std::string> funcnames {"g1", "g2", "g3", "g4"};
-    const double x0 = 0;
-    const double abstol = 5e-7;
-
-    for (auto i = 0; i < vec.size(); ++i) {
-        fp::test_fixed_point(vec[i], x0, abstol, funcnames[i], filenames[i]);
-    }
+    std::cout << df1 << std::endl;
+    std::cout << df2 << std::endl;
 }
