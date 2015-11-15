@@ -257,6 +257,83 @@ namespace fp {
             std::vector<Float>>
     secant_method(const Func& f, Float x0, Float x1, Float abstol)
     {
+        // vector to store intermediate x_i values
+        std::vector<Float> xvec;
+        std::vector<Float> rvec; // vector of rate approximations
 
+        // do the first iteration outside the while loop
+        xvec.push_back(x1);
+        auto x2 = x1 - f(x1) * ((x1 - x0) / (f(x1) - f(x0)));
+        xvec.push_back(x2);
+        Float currtol = static_cast<Float>(std::abs(xvec[0] - x1));
+
+        // number of iterations : we have already performed one
+        auto i = 2;
+        Float rate = NAN;
+        rvec.push_back(rate);
+
+        Float x_iminus2;
+        Float x_iminus1;
+        Float x_i;
+        Float x_iplus1;
+        Float deltaxp1;
+        while (currtol > abstol)
+        {
+            x_iminus2 = xvec[i - 2];
+            x_iminus1 = xvec[i - 1];
+            x_i = x_iminus1 - f(x_iminus1) * ((x_iminus1 - x_iminus2) / (f(x_iminus1) - f(x_iminus2)));
+            xvec.push_back(x_i);
+            x_iplus1 = x_i - f(x_i) * ((x_i - x_iminus1) / (f(x_i) - f(x_iminus1)));
+            currtol = std::abs(x_i - x_iminus1);
+            deltaxp1 = std::abs(x_iplus1 - x_i);
+
+            if ((i - 2) > 0) {
+                rate = std::log(deltaxp1 / currtol) / std::log(currtol / std::abs(x_iminus1 - xvec[i - 2]));
+                rvec.push_back(rate);
+            } else {
+                rvec.push_back(NAN);
+            }
+
+            ++i;
+        }
+
+        return std::make_tuple(xvec, i, rvec);
+    }
+
+    template<typename Float, typename = std::enable_if<std::is_arithmetic<Float>::value>::type>
+    Float midpoint(Float a, Float b)
+    {
+        return a + (b - a) / 2;
+    }
+
+    template<typename Float, typename = std::enable_if<std::is_arithmetic<Float>::value>::type>
+    int sign(Float a)
+    {
+        return a > 0 ? 1 : -1;
+    }
+
+    template<typename Func, typename Float>
+    Float
+    bisection_method(const Func& f, Float a, Float b, Float abstol, int numiters)
+    {
+        auto n = 1;
+        Float c;
+        Float l = a;
+        Float u = b;
+        while (n <= numiters)
+        {
+            c = midpoint(l, u);
+            if ((u - l) < abstol) {
+                break;
+            }
+            if (sign(f(c)) = sign(f(l))) {
+                l = c;
+            } else {
+                b = c;
+            }
+            n++;
+        }
+
+        return c;
     }
 }
