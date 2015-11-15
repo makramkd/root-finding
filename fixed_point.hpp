@@ -118,7 +118,7 @@ namespace fp {
         };
 
         std::vector<std::function<double(double)>> vec {g1, g2, g3, g4};
-        std::vector<std::string> filenames {"g1.txt", "g2.txt", "g3.txt", "g4.txt"};
+        std::vector<std::string> filenames {"fpg1.txt", "fpg2.txt", "fpg3.txt", "fpg4.txt"};
         std::vector<std::string> funcnames {"g1", "g2", "g3", "g4"};
 
         for (auto i = 0; i < vec.size(); ++i) {
@@ -213,27 +213,27 @@ namespace fp {
         // so we have to stick to traditional functions
         double f1(double x)
         {
-            return x * x - 3 * x + 2;
+            return x * x - 3 * x + 2; // q1
         }
 
         double f2(double x)
         {
-            return x * x * x - 2 * x - 5;
+            return x * x * x - 2 * x - 5; // q3a
         }
 
         double f3(double x)
         {
-            return std::exp(-x) - x;
+            return std::exp(-x) - x; // q3b
         }
 
         double f4(double x)
         {
-            return std::sin(x) * x - 1;
+            return std::sin(x) * x - 1; // q3c
         }
 
         double f5(double x)
         {
-            return x * x * x - 3 * x * x + 3 * x - 1;
+            return x * x * x - 3 * x * x + 3 * x - 1; // q3d
         }
     }
 
@@ -242,7 +242,8 @@ namespace fp {
         using namespace newton; // for functions f1 to f5
 
         std::vector<double (*)(double)> vec {f1, f2, f3, f4, f5};
-        std::vector<std::string> filenames {"f1.txt", "f2.txt", "f3.txt", "f4.txt", "f5.txt"};
+        std::vector<std::string> filenames {"newtonf1.txt", "newtonf2.txt",
+                                            "newtonf3.txt", "newtonf4.txt", "newtonf5.txt"};
         std::vector<std::string> funcnames {"f1", "f2", "f3", "f4", "f5"};
         std::vector<double> xnaughts {2.1, 2.5, 0.6, 0.9, 0.5};
 
@@ -262,13 +263,14 @@ namespace fp {
         std::vector<Float> rvec; // vector of rate approximations
 
         // do the first iteration outside the while loop
+        xvec.push_back(x0);
         xvec.push_back(x1);
         auto x2 = x1 - f(x1) * ((x1 - x0) / (f(x1) - f(x0)));
         xvec.push_back(x2);
-        Float currtol = static_cast<Float>(std::abs(xvec[0] - x1));
+        Float currtol = static_cast<Float>(std::abs(xvec[2] - x1));
 
         // number of iterations : we have already performed one
-        auto i = 2;
+        auto i = 3;
         Float rate = NAN;
         rvec.push_back(rate);
 
@@ -339,13 +341,29 @@ namespace fp {
         file << "END" << std::endl;
     }
 
-    template<typename Float, typename = std::enable_if<std::is_arithmetic<Float>::value>::type>
+    void test_secant(double abstol)
+    {
+        using namespace newton; // using the newton functions
+
+        std::vector<double (*)(double)> vec {f1, f2, f3, f4, f5};
+        std::vector<std::string> filenames {"secantf1.txt", "secantf2.txt",
+                                            "secantf3.txt", "secantf4.txt", "secantf5.txt"};
+        std::vector<std::string> funcnames {"f1", "f2", "f3", "f4", "f5"};
+        std::vector<double> xnaughts {2.5, -15, -1, 0, -4}; // xnaughts for secant
+        std::vector<double> xones {2.1, -12.5, -0.5, 0.3, -3}; // xones for secant
+
+        for (auto i = 0; i < vec.size(); ++i) {
+            test_secant_method(*vec[i], xnaughts[i], xones[i], abstol, funcnames[i], filenames[i]);
+        }
+    }
+
+    template<typename Float, typename = typename std::enable_if<std::is_arithmetic<Float>::value>::type>
     Float midpoint(Float a, Float b)
     {
         return a + (b - a) / 2;
     }
 
-    template<typename Float, typename = std::enable_if<std::is_arithmetic<Float>::value>::type>
+    template<typename Float, typename = typename std::enable_if<std::is_arithmetic<Float>::value>::type>
     int sign(Float a)
     {
         return a > 0 ? 1 : -1;
@@ -368,7 +386,7 @@ namespace fp {
             if (sign(f(c)) == sign(f(l))) {
                 l = c;
             } else {
-                b = c;
+                u = c;
             }
             n++;
         }
