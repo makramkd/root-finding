@@ -127,7 +127,10 @@ namespace fp {
     }
 
     template<typename Func, typename Float>
-    std::tuple<std::vector<Float>, int, std::vector<Float>> newton_method(const Func& f, Float x0, Float abstol)
+    std::tuple<std::vector<Float>,
+            int,
+            std::vector<Float>>
+    newton_method(const Func& f, Float x0, Float abstol)
     {
         // vector to store intermediate x_i values
         std::vector<Float> xvec;
@@ -180,7 +183,7 @@ namespace fp {
         file.open(filename.c_str(), std::ios::out | std::ios::app);
         file << std::scientific << std::setprecision(15);
         file << "Getting the roots of '" << funcname
-        << "' given x_0 = " << x0 << " and abstol = " << abstol << std::endl;
+        << "' given x_0 = " << x0 << " and abstol = " << abstol << " using Newton's Method." << std::endl;
 
         auto tuple = newton_method(f, x0, abstol);
 
@@ -313,7 +316,8 @@ namespace fp {
         file.open(filename.c_str(), std::ios::out | std::ios::app);
         file << std::scientific << std::setprecision(15);
         file << "Getting the roots of '" << funcname
-        << "' given x_0 = " << x0 << ", x_1 = " << x1 << " and abstol = " << abstol << std::endl;
+        << "' given x_0 = " << x0 << ", x_1 = " << x1 << " and abstol = " << abstol << " using the Secant Method."
+            << std::endl;
 
         auto tuple = secant_method(f, x0, x1, abstol);
 
@@ -349,21 +353,23 @@ namespace fp {
         std::vector<std::string> filenames {"secantf1.txt", "secantf2.txt",
                                             "secantf3.txt", "secantf4.txt", "secantf5.txt"};
         std::vector<std::string> funcnames {"f1", "f2", "f3", "f4", "f5"};
-        std::vector<double> xnaughts {2.5, -15, -1, 0, -4}; // xnaughts for secant
-        std::vector<double> xones {2.1, -12.5, -0.5, 0.3, -3}; // xones for secant
+        std::vector<double> xnaughts {2.5, 0, -1, 0.8, -4}; // xnaughts for secant
+        std::vector<double> xones {2.1, 1, -0.5, 0.9, -3}; // xones for secant
 
         for (auto i = 0; i < vec.size(); ++i) {
             test_secant_method(*vec[i], xnaughts[i], xones[i], abstol, funcnames[i], filenames[i]);
         }
     }
 
-    template<typename Float, typename = typename std::enable_if<std::is_arithmetic<Float>::value>::type>
+    template<typename Float,
+            typename = typename std::enable_if<std::is_arithmetic<Float>::value>::type>
     Float midpoint(Float a, Float b)
     {
         return a + (b - a) / 2;
     }
 
-    template<typename Float, typename = typename std::enable_if<std::is_arithmetic<Float>::value>::type>
+    template<typename Float,
+            typename = typename std::enable_if<std::is_arithmetic<Float>::value>::type>
     int sign(Float a)
     {
         return a > 0 ? 1 : -1;
@@ -373,7 +379,8 @@ namespace fp {
     std::tuple<std::vector<Float>,
             int,
             std::vector<Float>>
-    bisection_method(const Func& f, Float a, Float b, Float abstol, int numiters)
+    bisection_method(const Func& f, Float a,
+                     Float b, Float abstol, int numiters)
     {
         std::vector<Float> xvec; // to store intermediate root approximations
         std::vector<Float> rvec; // to store rate approximations
@@ -404,7 +411,8 @@ namespace fp {
             nextc = midpoint(l, u);
             // will probably be garbage in the first iteration
             if (n >= 2) {
-                rate = std::log(std::abs(nextc - c) / currtol) / std::log(currtol / std::abs(prevc - xvec[n - 2]));
+                rate = std::log(std::abs(nextc - c) / currtol)
+                       / std::log(currtol / std::abs(prevc - xvec[n - 2]));
                 rvec.push_back(rate);
             }
             n++;
@@ -425,7 +433,7 @@ namespace fp {
         file << std::scientific << std::setprecision(15);
         file << "Getting the roots of '" << funcname
         << "' given a = " << a << ", b = " << b << ", numiters = " << numiters
-            << " and abstol = " << abstol << std::endl;
+            << " and abstol = " << abstol  << " using the Bisection Method." << std::endl;
 
         auto tuple = bisection_method(f, a, b, abstol, numiters);
 
