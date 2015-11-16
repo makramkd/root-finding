@@ -71,7 +71,7 @@ namespace fp {
     {
         const auto h = std::sqrt(std::numeric_limits<typename return_type<F>::type>::epsilon());
         return (func(x + h) - func(x - h)) / (2 * h);
-    };
+    }
 }
 
 #endif
