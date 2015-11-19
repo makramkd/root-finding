@@ -5,6 +5,7 @@
 #include <cmath>
 #include <fstream>
 #include <iomanip>
+#include <cstdlib>
 
 #include "derivative.hpp"
 
@@ -130,7 +131,7 @@ namespace fp {
     std::tuple<std::vector<Float>,
             int,
             std::vector<Float>>
-    newton_method(const Func& f, Float x0, Float abstol)
+    newton_method(const Func& f, Float x0, Float abstol, int numiter = 50)
     {
         // vector to store intermediate x_i values
         std::vector<Float> xvec;
@@ -150,12 +151,61 @@ namespace fp {
         Float x_i;
         Float x_iplus1;
         Float deltaxp1;
-        while (currtol > abstol)
+        while (currtol > abstol && i < numiter)
         {
             x_iminus1 = xvec[i - 1];
+            auto fat = f(x_iminus1);
+            auto fp = derivative(f, x_iminus1);
             x_i = x_iminus1 - (f(x_iminus1) / derivative(f, x_iminus1));
             xvec.push_back(x_i);
             x_iplus1 = x_i - (f(x_i) / derivative(f, x_i));
+            currtol = std::abs(x_i - x_iminus1);
+            deltaxp1 = std::abs(x_iplus1 - x_i);
+
+            if ((i - 2) > 0) {
+                rate = std::log(deltaxp1 / currtol) / std::log(currtol / std::abs(x_iminus1 - xvec[i - 2]));
+                rvec.push_back(rate);
+            } else {
+                rvec.push_back(NAN);
+            }
+
+            ++i;
+        }
+
+        return std::make_tuple(xvec, i, rvec);
+    }
+
+    template<typename Func, typename Float>
+    std::tuple<std::vector<Float>,
+            int,
+            std::vector<Float>>
+    newton_method(const Func& f, const Func& diff, Float x0, Float abstol, int numiter = 50)
+    {
+        // vector to store intermediate x_i values
+        std::vector<Float> xvec;
+        std::vector<Float> rvec; // vector of rate approximations
+
+        // do the first iteration outside the while loop
+        xvec.push_back(x0);
+        auto x1 = x0 - diff(x0);
+        xvec.push_back(x1);
+        Float currtol = static_cast<Float>(std::abs(xvec[1] - x0));
+
+        // number of iterations : we have already performed one
+        auto i = 1;
+        Float rate = NAN;
+        rvec.push_back(rate);
+
+        Float x_iminus1;
+        Float x_i;
+        Float x_iplus1;
+        Float deltaxp1;
+        while (currtol > abstol && i < numiter)
+        {
+            x_iminus1 = xvec[i - 1];
+            x_i = x_iminus1 - diff(x_iminus1);
+            xvec.push_back(x_i);
+            x_iplus1 = x_i - diff(x_i);
             currtol = std::abs(x_i - x_iminus1);
             deltaxp1 = std::abs(x_iplus1 - x_i);
 
@@ -211,6 +261,27 @@ namespace fp {
         file << "END" << std::endl;
     }
 
+    template<typename Func, typename Float>
+    void test_newton_gnu(const Func& f, const Func& diff, Float x0, Float abstol,
+                         const std::string& funcname = "f", const std::string& filename = "f_data.dat")
+    {
+        std::ofstream file;
+        file.open(filename.c_str(), std::ios::out | std::ios::app);
+        file << std::scientific << std::setprecision(15);
+        file << "#x y" << std::endl;
+
+        auto tuple = newton_method(f, diff, x0, abstol);
+
+        auto xvec = std::get<0>(tuple);
+
+        for (auto i = 0; i < xvec.size(); ++i)
+        {
+            file << i << ' ' << xvec[i] << '\n';
+        }
+
+        file.close();
+    }
+
     namespace newton {
         // we can't use functors with the derivative function
         // so we have to stick to traditional functions
@@ -238,6 +309,17 @@ namespace fp {
         {
             return x * x * x - 3 * x * x + 3 * x - 1; // q3d
         }
+
+        // for question 4
+        double f(double x)
+        {
+            return std::pow((1 - (3 / (4 * x))), static_cast<double>(1) / static_cast<double>(3));
+        }
+
+        double diff(double x)
+        {
+            return 4 * x * x - 3 * x;
+        }
     }
 
     void test_newton(double abstol)
@@ -253,6 +335,33 @@ namespace fp {
         for (auto i = 0; i < vec.size(); ++i) {
             test_newton_method(*vec[i], xnaughts[i], abstol, funcnames[i], filenames[i]);
         }
+    }
+
+    void test_newton_2(double abstol)
+    {
+        using namespace newton;
+
+        // seed the random number generator
+        std::srand(std::time(nullptr));
+        // random number generator
+        auto random = [](double min, double max) -> double {
+            return min + ((double) std::rand() / RAND_MAX) * (max - min);
+        };
+
+        std::vector<double> randoms;
+        for (auto i = 0; i < 3; ++i)
+        {
+            randoms.push_back(random(0.0, 1.0));
+        }
+
+        for (auto i = 0; i < randoms.size(); ++i)
+        {
+            test_newton_gnu(f, diff, randoms[i], abstol, "f", "f_data_x" + std::to_string(i) + ".dat");
+        }
+
+        // in addition to the random numbers we also need x0 = 0 and x0 = 1
+        test_newton_gnu(f, diff, 0.0, abstol, "f", "f_data_x00.dat");
+        test_newton_gnu(f, diff, 1.0, abstol, "f", "f_data_x01.dat");
     }
 
     template<typename Func, typename Float>
